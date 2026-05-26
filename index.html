@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="ca">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculadora Oficial de Xapes</title>
+    <style>
+        :root {
+            --primary: #d4af37; /* Color or de cava */
+            --primary-hover: #aa8c2c;
+            --bg: #f8f9fa;
+            --card-bg: #ffffff;
+            --text: #2d3748;
+            --error: #e53e3e;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: var(--bg);
+            color: var(--text);
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .container {
+            background-color: var(--card-bg);
+            padding: 30px;
+            border-radius: 15px;
+            box-shadow: 0 10px 25px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        h1 {
+            text-align: center;
+            font-size: 24px;
+            margin-bottom: 5px;
+            color: var(--text);
+        }
+
+        .subtitle {
+            text-align: center;
+            font-size: 14px;
+            color: #718096;
+            margin-bottom: 25px;
+        }
+
+        .info-tag {
+            background-color: #fefcbf;
+            border: 1px solid #faf089;
+            color: #744210;
+            padding: 10px;
+            border-radius: 8px;
+            font-size: 13px;
+            text-align: center;
+            margin-bottom: 20px;
+            font-weight: bold;
+        }
+
+        .form-group {
+            margin-bottom: 18px;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 6px;
+            font-weight: 600;
+            font-size: 14px;
+        }
+
+        input {
+            width: 100%;
+            padding: 12px;
+            border: 2px solid #e2e8f0;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 16px;
+            transition: border-color 0.2s;
+        }
+
+        input:focus {
+            outline: none;
+            border-color: var(--primary);
+        }
+
+        button {
+            width: 100%;
+            background-color: var(--primary);
+            color: white;
+            border: none;
+            padding: 14px;
+            border-radius: 8px;
+            font-size: 16px;
+            font-weight: bold;
+            cursor: pointer;
+            transition: background-color 0.2s;
+            margin-top: 10px;
+        }
+
+        button:hover {
+            background-color: var(--primary-hover);
+        }
+
+        .error-message {
+            color: var(--error);
+            font-size: 14px;
+            margin-top: 15px;
+            text-align: center;
+            display: none;
+            font-weight: 500;
+            background-color: #fff5f5;
+            padding: 10px;
+            border-radius: 8px;
+            border: 1px solid #fed7d7;
+        }
+
+        .result-box {
+            margin-top: 25px;
+            padding: 20px;
+            background-color: #f7fafc;
+            border-radius: 10px;
+            border-left: 5px solid var(--primary);
+            text-align: center;
+            display: none;
+        }
+
+        .result-title {
+            font-size: 14px;
+            color: #4a5568;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+
+        .result-price {
+            font-size: 32px;
+            font-weight: 800;
+            color: var(--text);
+            margin-top: 5px;
+        }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>🏷️ Taxador de Xapes</h1>
+    <div class="subtitle">Fórmula de mercat optimitzada</div>
+    
+    <div class="info-tag">
+        ⚠️ Accés restringit: Només per a xapes exclusives amb més de 100 buscades.
+    </div>
+
+    <div class="form-group">
+        <label for="buscades">Buscades (B):</label>
+        <input type="number" id="buscades" placeholder="Ex: 250" min="101" required>
+    </div>
+
+    <div class="form-group">
+        <label for="repetides">Repetides (R):</label>
+        <input type="number" id="repetides" placeholder="Ex: 2" value="0" min="0">
+    </div>
+
+    <div class="form-group">
+        <label for="coleccio">A la Col·lecció (C):</label>
+        <input type="number" id="coleccio" placeholder="Ex: 45" value="0" min="0">
+    </div>
+
+    <button onclick="calcularPreu()">Calcular Preu</button>
+
+    <div id="error" class="error-message"></div>
+
+    <div id="result" class="result-box">
+        <div class="result-title">Preu estimat de mercat</div>
+        <div id="price" class="result-price">0,00€</div>
+    </div>
+</div>
+
+<script>
+    function calcularPreu() {
+        // Obtenir valors dels inputs
+        const B = parseFloat(document.getElementById('buscades').value);
+        const R = parseFloat(document.getElementById('repetides').value) || 0;
+        const C = parseFloat(document.getElementById('coleccio').value) || 0;
+
+        const errorDiv = document.getElementById('error');
+        const resultDiv = document.getElementById('result');
+        const priceDiv = document.getElementById('price');
+
+        // Ocultar resultats i errors anteriors
+        errorDiv.style.display = 'none';
+        resultDiv.style.display = 'none';
+
+        // Validació estricta de més de 100 buscades
+        if (isNaN(B)) {
+            errorDiv.innerText = "Siusplau, introdueix el nombre de persones que busquen la xapa.";
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        if (B <= 100) {
+            errorDiv.innerText = "❌ Denegat: Aquesta fórmula està reservada per a xapes de col·lecció amb més de 100 buscades.";
+            errorDiv.style.display = 'block';
+            return;
+        }
+
+        // Aplicació de la fórmula matemàtica exacte
+        // Preu = (0.03 * B^1.3) * 0.95^((R^0.75 * 100) / B) * 0.95^((C^0.5 * 80) / B)
+        const partBase = 0.03 * Math.pow(B, 1.3);
+        const partRepetides = Math.pow(0.95, (Math.pow(R, 0.75) * 100) / B);
+        const partColeccio = Math.pow(0.95, (Math.pow(C, 0.5) * 80) / B);
+
+        let preuFinal = partBase * partRepetides * partColeccio;
+
+        // Evitar valors estranys o negatius
+        if (preuFinal < 0 || isNaN(preuFinal)) preuFinal = 0;
+
+        // Mostrar el resultat en format local català (amb coma per als decimals)
+        priceDiv.innerText = preuFinal.toLocaleString('ca-ES', { 
+            style: 'currency', 
+            currency: 'EUR' 
+        });
+        
+        resultDiv.style.display = 'block';
+    }
+</script>
+
+</body>
+</html>
